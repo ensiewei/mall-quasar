@@ -54,6 +54,7 @@
                 <q-btn size="xs" @click="changeCount(value, value.count - 1)">-</q-btn>
                 <q-btn size="xs" disable unelevated>{{ value.count }}</q-btn>
                 <q-btn size="xs" @click="changeCount(value, value.count + 1)">+</q-btn>
+                <q-item-label v-if="value.stock < value.count" class="text-red">库存暂时仅剩:{{ value.stock }}</q-item-label>
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -254,9 +255,7 @@ export default {
               },
               data: cart
             }).then(res => {
-              if (res.data.code === 0) {
-                console.log(111)
-              } else {
+              if (res.data.code !== 0) {
                 this.$q.notify({
                   color: 'red-5',
                   textColor: 'white',

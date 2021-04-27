@@ -59,6 +59,7 @@
                 <q-btn size="xs" disable unelevated>{{ value.count }}</q-btn>
                 <q-btn size="xs" @click="changeCount(value, value.count + 1)">+</q-btn>
               </q-item-label>
+              <q-item-label v-if="value.stockCount < value.count" class="text-red">库存暂时仅剩:{{ value.stockCount }}</q-item-label>
             </q-item-section>
           </q-item>
         </q-list>

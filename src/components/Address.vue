@@ -68,7 +68,6 @@ export default {
           id: id
         }
       }).then(res => {
-        console.log(res)
         if (res.data.code === 0) {
           this.$router.go(-1)
         } else {
@@ -96,7 +95,6 @@ export default {
         userToken: token
       }
     }).then(res => {
-      console.log(res)
       if (res.data.code === 0) {
         this.address = res.data.address
       } else {

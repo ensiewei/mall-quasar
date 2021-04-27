@@ -171,7 +171,6 @@ export default {
       })
     },
     confirm () {
-      console.log(111)
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
