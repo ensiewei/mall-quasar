@@ -11,7 +11,7 @@
         v-model="user.username"
         label="Your name *"
         lazy-rules
-        :rules="[ val => val && val.length >= 4 && val.length <= 16 || 'Please type something (length range [4,16])']"
+        :rules="[ val => val && val.length >= 4 && val.length <= 16 || '用户名长度应为4到16位']"
       />
 
       <q-input
@@ -21,8 +21,8 @@
         label="Your phone *"
         lazy-rules
         :rules="[
-          val => val !== null && val !== '' || 'Please type your phone',
-          val => val > 0 && val < 20000000000 || 'Please type a real phone'
+          val => val || '手机号不能为空',
+          val => val > 0 && val < 20000000000 || '非法的手机号'
         ]"
       />
 
@@ -32,7 +32,7 @@
         v-model="user.password"
         label="Your password *"
         lazy-rules
-        :rules="[ val => val && val.length >= 6 && val.length <= 16 || 'Please type something (length range[6,16])']"
+        :rules="[ val => val && val.length >= 6 && val.length <= 16 || '密码长度应为6到16位']"
       />
 
       <q-input
@@ -42,8 +42,8 @@
         label="Your repassword *"
         lazy-rules
         :rules="[
-          val => val && val.length >= 6 && val.length <= 16 || 'Please type something (length range[6,16])',
-          val => val === user.password || 'The two passwords are different'
+          val => val && val.length >= 6 && val.length <= 16 || '密码长度应为6到16位',
+          val => val === user.password || '两次输入的密码不一致'
         ]"
       />
 
@@ -70,7 +70,7 @@ export default {
         color: 'green-4',
         textColor: 'white',
         icon: 'cloud_done',
-        message: 'Submitted'
+        message: '提交成功'
       })
       this.$axios({
         method: 'post',
@@ -82,7 +82,7 @@ export default {
             color: 'green-4',
             textColor: 'white',
             icon: 'cloud_done',
-            message: 'register success'
+            message: '注册成功'
           })
           this.$router.go(-1)
         } else {

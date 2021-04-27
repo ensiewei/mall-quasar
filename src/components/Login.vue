@@ -14,8 +14,8 @@
         label="Your phone *"
         lazy-rules
         :rules="[
-          val => val !== null && val !== '' || 'Please type your phone',
-          val => val > 0 && val < 20000000000 || 'Please type a real phone'
+          val => val || '手机号不能为空',
+          val => val > 0 && val < 20000000000 || '非法的手机号'
         ]"
       />
 
@@ -25,7 +25,7 @@
         v-model="user.password"
         label="Your password *"
         lazy-rules
-        :rules="[ val => val && val.length >= 4 && val.length <= 16 || 'Please type something (length range[4,16])']"
+        :rules="[ val => val && val.length >= 4 && val.length <= 16 || '密码长度应为4到16位']"
       />
 
       <div>
@@ -52,7 +52,7 @@ export default {
         position: 'center',
         textColor: 'white',
         icon: 'cloud_done',
-        message: 'Submitted'
+        message: '提交成功'
       })
       this.$axios({
         method: 'post',
@@ -66,7 +66,7 @@ export default {
             position: 'center',
             textColor: 'white',
             icon: 'cloud_done',
-            message: 'login successful'
+            message: '登录成功'
           })
           this.$router.go(-1)
         } else {
