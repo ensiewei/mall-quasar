@@ -21,9 +21,9 @@
     <q-drawer :model-value="rightDrawerOpen" side="right" bordered overlay>
       <div class="q-pa-md" v-for="(value, name, index) in group" :key="index">
         <div class="text-subtitle2" >{{ name }}</div>
-        <q-btn-group spread>
+        <div>
           <q-btn :color="isClicked(name, v) ? 'red': 'primary'" :label="v" v-for="(v, index) of value" :key="index" @click="onBtn(name, v)" />
-        </q-btn-group>
+        </div>
       </div>
     </q-drawer>
 

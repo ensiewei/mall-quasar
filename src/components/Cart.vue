@@ -309,13 +309,11 @@ export default {
       })
     }
   },
-  beforeCreate () {
+  created () {
     const token = this.$q.cookies.get('token')
     if (token !== null) {
       this.login = true
     }
-  },
-  created () {
     if (!this.login) return
     this.$axios({
       method: 'post',
