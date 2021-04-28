@@ -9,7 +9,7 @@
       <q-input
         filled
         v-model="user.username"
-        label="Your name *"
+        label="用户名 *"
         lazy-rules
         :rules="[ val => val && val.length >= 4 && val.length <= 16 || '用户名长度应为4到16位']"
       />
@@ -18,7 +18,7 @@
         filled
         type="number"
         v-model="user.phone"
-        label="Your phone *"
+        label="手机号 *"
         lazy-rules
         :rules="[
           val => val || '手机号不能为空',
@@ -30,7 +30,7 @@
         filled
         type="password"
         v-model="user.password"
-        label="Your password *"
+        label="密码 *"
         lazy-rules
         :rules="[ val => val && val.length >= 6 && val.length <= 16 || '密码长度应为6到16位']"
       />
@@ -39,7 +39,7 @@
         filled
         type="password"
         v-model="repassword"
-        label="Your repassword *"
+        label="确认密码 *"
         lazy-rules
         :rules="[
           val => val && val.length >= 6 && val.length <= 16 || '密码长度应为6到16位',

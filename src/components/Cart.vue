@@ -6,7 +6,7 @@
         <q-toolbar-title>
           购物车
         </q-toolbar-title>
-        <q-btn dense flat round @click="isSubmit = !isSubmit">{{ isSubmit ? '编辑' : '完成'}}</q-btn>
+        <q-btn v-if="login" dense flat round @click="isSubmit = !isSubmit">{{ isSubmit ? '编辑' : '完成'}}</q-btn>
       </q-toolbar>
     </q-header>
 
@@ -35,7 +35,7 @@
     </q-drawer>
 
     <q-page-container>
-      <div class="q-pa-md">
+      <div v-if="login" class="q-pa-md">
         <q-list bordered padding>
           <q-item-label header>购物车</q-item-label>
 
@@ -66,8 +66,12 @@
       </div>
     </q-page-container>
 
-    <q-footer class="bg-white">
-      <q-toolbar class="bg-grey-5">
+    <q-footer class="bg-white q-pa-md">
+      <div v-if="!login" class="bg-grey-5">
+        <span>&emsp;你还没登录呢&emsp;</span>
+        <q-btn to="login" color="red">去登陆 ></q-btn>
+      </div>
+      <q-toolbar v-else class="bg-grey-5">
         <q-checkbox v-model="all" @click="selectAll" />
         <span>全选</span>
         <span>&emsp;</span>
@@ -76,7 +80,7 @@
         <span>&emsp;</span>
         <q-btn color="red" @click="submit">{{ isSubmit ? '去结算' : '删除'}}({{ count }})</q-btn>
       </q-toolbar>
-      <div class="q-pa-md">
+      <div >
         <q-btn-group spread>
           <q-btn color="primary" label="首页" to="/" />
           <q-btn color="primary" label="购物车" to="/cart" />
@@ -92,6 +96,7 @@
 export default {
   data () {
     return {
+      login: false,
       rightDrawerOpen: false,
       drawerSku: {},
       drawerSkus: undefined,
@@ -306,11 +311,12 @@ export default {
   },
   beforeCreate () {
     const token = this.$q.cookies.get('token')
-    if (token === null) {
-      this.$router.push('login')
+    if (token !== null) {
+      this.login = true
     }
   },
   created () {
+    if (!this.login) return
     this.$axios({
       method: 'post',
       headers: { 'Content-Type': 'application/json' },

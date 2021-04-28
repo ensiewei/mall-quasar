@@ -83,6 +83,7 @@
 export default {
   data () {
     return {
+      login: false,
       slide: 0,
       rightDrawerOpen: false,
       sku: {},
@@ -106,6 +107,7 @@ export default {
     }
   },
   created () {
+    if (this.$q.cookies.get('token') !== null) this.login = true
     this.fetchData()
   },
   updated () {
@@ -170,18 +172,26 @@ export default {
       return this.skus[this.$route.params.id] ? this.skus[this.$route.params.id].count : 0
     },
     submit () {
+      if (!this.login) {
+        this.$q.notify({
+          color: 'primary',
+          position: 'top',
+          textColor: 'white',
+          icon: 'warning',
+          message: '你还没登录呢',
+          actions: [
+            { label: '点我去登录', color: 'green', handler: () => this.$router.push('login') }
+          ]
+        })
+        return
+      }
       if (this.submitType === 0) {
-        const token = this.$q.cookies.get('token')
-        if (token === null) {
-          this.$router.push('login')
-          return
-        }
         this.$axios({
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
           url: 'http://106.55.156.192:5797/api/cart/cart/add',
           params: {
-            userToken: token,
+            userToken: this.$q.cookies.get('token'),
             skuId: this.$route.params.id,
             count: this.count
           }
@@ -197,6 +207,7 @@ export default {
           } else {
             this.$q.notify({
               color: 'red-5',
+              position: 'top',
               textColor: 'white',
               icon: 'warning',
               message: res.data.msg
