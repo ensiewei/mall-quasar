@@ -34,7 +34,9 @@
             <q-item-section thumbnail>
               <img :src="value[0].image">
             </q-item-section>
-            <q-item-section v-html="value[0].title"></q-item-section>
+            <q-item-section>
+              <span v-html="value[0].title"></span>
+            </q-item-section>
             <q-item-section v-html="'￥ ' + (value[0].price / 100)" ></q-item-section>
           </q-item>
         </q-list>
