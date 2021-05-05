@@ -7,7 +7,7 @@
           @submit="onSearch"
           class="q-gutter-md"
         >
-          <q-input dark dense standout v-model="text" autofocus>
+          <q-input dark dense standout v-model="text" autofocus :placeholder="placeholder">
             <template v-slot:append>
               <q-icon name="search" @click="onSearch" />
             </template>
@@ -18,7 +18,7 @@
 
     </q-header>
 
-    <q-drawer :model-value="rightDrawerOpen" side="right" bordered overlay>
+    <q-drawer :model-value="rightDrawerOpen" side="right" bordered overlay @hide="this.rightDrawerOpen = false">
       <div class="q-pa-md" v-for="(value, name, index) in group" :key="index">
         <div class="text-subtitle2" >{{ name }}</div>
         <div>
@@ -49,6 +49,7 @@ export default {
   data () {
     return {
       text: '',
+      placeholder: '手机',
       rightDrawerOpen: false,
       model: undefined,
       sku: undefined,
@@ -76,21 +77,13 @@ export default {
       })
     },
     onSearch () {
-      if (!this.text || this.text === '') {
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'warning',
-          message: '你什么都还没输入呢'
-        })
-        return
-      }
       this.$q.notify({
         color: 'green-4',
         textColor: 'white',
         icon: 'cloud_done',
         message: '努力检索中...'
       })
+      this.text = this.text || this.placeholder
       this.query = {
         match: this.text
       }
