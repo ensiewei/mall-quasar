@@ -48,8 +48,8 @@
       />
 
       <div>
-        <q-btn label="Submit" type="submit" color="primary"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+        <q-btn label="提交" type="submit" color="primary"/>
+        <q-btn label="重置" type="reset" color="primary" flat class="q-ml-sm" />
       </div>
     </q-form>
 

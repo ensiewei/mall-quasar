@@ -28,9 +28,9 @@
       />
 
       <div>
-        <q-btn label="Submit" type="submit" color="primary"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
-        <q-btn label="Register >" color="green" flat class="q-ml-sm" to="register" />
+        <q-btn label="提交" type="submit" color="primary"/>
+        <q-btn label="重置" type="reset" color="primary" flat class="q-ml-sm" />
+        <q-btn label="注册 >" color="green" flat class="q-ml-sm" to="register" />
       </div>
     </q-form>
 
