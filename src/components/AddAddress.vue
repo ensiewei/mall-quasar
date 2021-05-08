@@ -30,7 +30,7 @@
             v-model="address.name"
             label="收货人"
             lazy-rules
-            :rules="[ val => val && val.length >= 2 && val.length <= 16 || 'Please type something (length range [2,16])']"
+            :rules="[ val => val && val.length >= 2 && val.length <= 16 || '长度应为2到16位']"
           />
 
           <q-input
@@ -40,8 +40,7 @@
             label="手机号码"
             lazy-rules
             :rules="[
-              val => val && val !== '' || 'Please type your phone',
-              val => val > 0 && val < 20000000000 || 'Please type a real phone'
+              val => val > 10000000000 && val < 20000000000 || '非法的手机号'
             ]"
           />
 
@@ -51,7 +50,7 @@
             label="所在地区"
             readonly
             lazy-rules
-            :rules="[ val => val && val !== '' || 'Please type something (length range [2,16])']"
+            :rules="[ val => val && val !== '' || '请选择所在地址']"
             @click="rightDrawerOpen = true"
           />
 
@@ -61,7 +60,7 @@
             v-model="address.detailAddress"
             label="详细地址"
             lazy-rules
-            :rules="[ val => val && val.length >= 6 && val.length <= 16 || 'Please type something (length range[6,16])']"
+            :rules="[ val => val && val.length >= 6 && val.length <= 16 || '请输入你的详细地址(长度应为6到16位)']"
           />
 
           <div>
@@ -109,7 +108,7 @@ export default {
         color: 'green-4',
         textColor: 'white',
         icon: 'cloud_done',
-        message: 'Submitted'
+        message: '提交成功'
       })
       this.$axios({
         method: 'post',
@@ -125,7 +124,7 @@ export default {
             color: 'green-4',
             textColor: 'white',
             icon: 'cloud_done',
-            message: 'added success'
+            message: '添加成功'
           })
           this.$router.go(-1)
         } else {
