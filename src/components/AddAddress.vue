@@ -113,7 +113,7 @@ export default {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://106.55.156.192:5797/api/order/address/add',
+        url: 'http://49.234.30.114:88/api/order/address/add',
         data: this.address,
         params: {
           userToken: token
@@ -147,7 +147,7 @@ export default {
       this.$axios({
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://106.55.156.192:5797/api/order/area/list1'
+        url: 'http://49.234.30.114:88/api/order/area/list1'
       }).then(res => {
         if (res.data.code === 0) {
           this.area = res.data.area
@@ -166,7 +166,7 @@ export default {
         this.$axios({
           method: 'get',
           headers: { 'Content-Type': 'application/json' },
-          url: 'http://106.55.156.192:5797/api/order/area/list2',
+          url: 'http://49.234.30.114:88/api/order/area/list2',
           params: {
             id: area.id
           }

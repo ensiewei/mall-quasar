@@ -162,7 +162,7 @@ export default {
         this.$axios({
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
-          url: 'http://106.55.156.192:5797/api/cart/cart/modifyCount',
+          url: 'http://49.234.30.114:88/api/cart/cart/modifyCount',
           params: {
             userToken: this.$q.cookies.get('token'),
             cartId: sku.cartId,
@@ -236,7 +236,7 @@ export default {
         this.$axios({
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
-          url: 'http://106.55.156.192:5797/api/cart/cart/delete',
+          url: 'http://49.234.30.114:88/api/cart/cart/delete',
           params: {
             userToken: this.$q.cookies.get('token')
           },
@@ -287,7 +287,7 @@ export default {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://106.55.156.192:5797/api/cart/cart/modifyItem',
+        url: 'http://49.234.30.114:88/api/cart/cart/modifyItem',
         params: {
           userToken: this.$q.cookies.get('token'),
           cartId: this.drawerSku.cartId,
@@ -318,7 +318,7 @@ export default {
     this.$axios({
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
-      url: 'http://106.55.156.192:5797/api/cart/cart/list',
+      url: 'http://49.234.30.114:88/api/cart/cart/list',
       params: {
         userToken: this.$q.cookies.get('token')
       }

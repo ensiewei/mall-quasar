@@ -59,7 +59,7 @@ export default {
       this.$axios({
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://106.55.156.192:5797/api/order/order/all',
+        url: 'http://49.234.30.114:88/api/order/order/all',
         params: {
           userToken: this.$q.cookies.get('token'),
           status

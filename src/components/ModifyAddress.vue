@@ -115,7 +115,7 @@ export default {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://106.55.156.192:5797/api/order/address/modify',
+        url: 'http://49.234.30.114:88/api/order/address/modify',
         data: this.address,
         params: {
           userToken: token
@@ -148,7 +148,7 @@ export default {
       this.$axios({
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://106.55.156.192:5797/api/order/area/list1'
+        url: 'http://49.234.30.114:88/api/order/area/list1'
       }).then(res => {
         if (res.data.code === 0) {
           this.area = res.data.area
@@ -167,7 +167,7 @@ export default {
         this.$axios({
           method: 'get',
           headers: { 'Content-Type': 'application/json' },
-          url: 'http://106.55.156.192:5797/api/order/area/list2',
+          url: 'http://49.234.30.114:88/api/order/area/list2',
           params: {
             id: area.id
           }
@@ -199,7 +199,7 @@ export default {
       this.$axios({
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://106.55.156.192:5797/api/order/address/fetch',
+        url: 'http://49.234.30.114:88/api/order/address/fetch',
         params: {
           userToken: this.$q.cookies.get('token'),
           id: this.$route.query.id
@@ -240,7 +240,7 @@ export default {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://106.55.156.192:5797/api/order/address/delete',
+        url: 'http://49.234.30.114:88/api/order/address/delete',
         params: {
           userToken: token,
           id: this.$route.query.id

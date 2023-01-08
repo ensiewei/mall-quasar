@@ -69,7 +69,7 @@ export default {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://106.55.156.192:5797/api/commodity/sku/query',
+        url: 'http://49.234.30.114:88/api/commodity/sku/query',
         data: this.query
       }).then(res => {
         this.group = res.data.group

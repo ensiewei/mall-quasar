@@ -118,7 +118,7 @@ export default {
       this.$axios({
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
-        url: `http://106.55.156.192:5797/api/commodity/sku/detail/${this.$route.params.id}`
+        url: `http://49.234.30.114:88/api/commodity/sku/detail/${this.$route.params.id}`
       }).then(res => {
         this.sku = res.data.sku
         this.rows = this.sku.groupDetail
@@ -189,7 +189,7 @@ export default {
         this.$axios({
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
-          url: 'http://106.55.156.192:5797/api/cart/cart/add',
+          url: 'http://49.234.30.114:88/api/cart/cart/add',
           params: {
             userToken: this.$q.cookies.get('token'),
             skuId: this.$route.params.id,

@@ -62,7 +62,7 @@ export default {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://106.55.156.192:5797/api/order/address/setDefault',
+        url: 'http://49.234.30.114:88/api/order/address/setDefault',
         params: {
           userToken: this.$q.cookies.get('token'),
           id: id
@@ -90,7 +90,7 @@ export default {
     this.$axios({
       method: 'get',
       headers: { 'Content-Type': 'application/json' },
-      url: 'http://106.55.156.192:5797/api/order/address/list',
+      url: 'http://49.234.30.114:88/api/order/address/list',
       params: {
         userToken: token
       }

@@ -91,7 +91,7 @@ export default {
       this.$axios({
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://106.55.156.192:5797/api/order/address/fetchDefault',
+        url: 'http://49.234.30.114:88/api/order/address/fetchDefault',
         params: {
           userToken: this.$q.cookies.get('token')
         }
@@ -122,7 +122,7 @@ export default {
         this.$axios({
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
-          url: 'http://106.55.156.192:5797/api/cart/cart/miniList',
+          url: 'http://49.234.30.114:88/api/cart/cart/miniList',
           params: {
             userToken: this.$q.cookies.get('token')
           },
@@ -147,7 +147,7 @@ export default {
         this.$axios({
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
-          url: 'http://106.55.156.192:5797/api/commodity/sku/miniList',
+          url: 'http://49.234.30.114:88/api/commodity/sku/miniList',
           params: {
             userToken: this.$q.cookies.get('token')
           },
@@ -199,7 +199,7 @@ export default {
           this.$axios({
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
-            url: 'http://106.55.156.192:5797/api/cart/cart/modifyCount',
+            url: 'http://49.234.30.114:88/api/cart/cart/modifyCount',
             params: {
               userToken: this.$q.cookies.get('token'),
               cartId: sku.cartId,
@@ -233,7 +233,7 @@ export default {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://106.55.156.192:5797/api/order/order/add',
+        url: 'http://49.234.30.114:88/api/order/order/add',
         params: {
           userToken: this.$q.cookies.get('token'),
           addressId: this.address.id
@@ -249,7 +249,7 @@ export default {
             this.$axios({
               method: 'post',
               headers: { 'Content-Type': 'application/json' },
-              url: 'http://106.55.156.192:5797/api/cart/cart/delete',
+              url: 'http://49.234.30.114:88/api/cart/cart/delete',
               params: {
                 userToken: this.$q.cookies.get('token')
               },

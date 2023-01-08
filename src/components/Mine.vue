@@ -51,7 +51,7 @@ export default {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: `http://106.55.156.192:5797/api/user/user/authenticate?token=${token}`
+        url: `http://49.234.30.114:88/api/user/user/authenticate?token=${token}`
       }).then(res => {
         if (res.data.code === 0) {
           this.user = res.data.user

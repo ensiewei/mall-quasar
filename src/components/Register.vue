@@ -74,7 +74,7 @@ export default {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: `http://106.55.156.192:5797/api/user/user/register?username=${this.user.username}&phone=${this.user.phone}&key=${this.user.password}`
+        url: `http://49.234.30.114:88/api/user/user/register?username=${this.user.username}&phone=${this.user.phone}&key=${this.user.password}`
       }).then(res => {
         if (res.data.code === 0) {
           this.$q.notify({
