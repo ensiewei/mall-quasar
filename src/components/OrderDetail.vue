@@ -80,7 +80,15 @@
 </template>
 
 <script>
+import { createMetaMixin } from 'quasar'
 export default {
+  mixins: [
+    createMetaMixin(function () {
+      return {
+        title: '订单详情'
+      }
+    })
+  ],
   data () {
     return {
       order: {},
@@ -130,6 +138,7 @@ export default {
           this.address = res.data.address
         } else {
           this.$q.notify({
+            timeout: 1000,
             color: 'red-5',
             textColor: 'white',
             icon: 'warning',
@@ -225,6 +234,7 @@ export default {
     const token = this.$q.cookies.get('token')
     if (token === null) {
       this.$q.notify({
+        timeout: 1000,
         color: 'red-5',
         textColor: 'white',
         icon: 'warning',

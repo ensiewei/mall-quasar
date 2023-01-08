@@ -80,7 +80,15 @@
 </template>
 
 <script>
+import { createMetaMixin } from 'quasar'
 export default {
+  mixins: [
+    createMetaMixin(function () {
+      return {
+        title: this.sku.title ? this.sku.title : '商品'
+      }
+    })
+  ],
   data () {
     return {
       login: false,
@@ -172,8 +180,20 @@ export default {
       return this.skus[this.$route.params.id] ? this.skus[this.$route.params.id].count : 0
     },
     submit () {
+      if (this.count > this.fetchCount()) {
+        this.$q.notify({
+          timeout: 1000,
+          color: 'red',
+          position: 'top',
+          textColor: 'white',
+          icon: 'warning',
+          message: `超过现有库存，现有(${this.fetchCount()})`
+        })
+        return
+      }
       if (!this.login) {
         this.$q.notify({
+          timeout: 1000,
           color: 'primary',
           position: 'top',
           textColor: 'white',
@@ -198,6 +218,7 @@ export default {
         }).then(res => {
           if (res.data.code === 0) {
             this.$q.notify({
+              timeout: 1000,
               color: 'green-4',
               textColor: 'white',
               position: 'top',
@@ -206,6 +227,7 @@ export default {
             })
           } else {
             this.$q.notify({
+              timeout: 1000,
               color: 'red-5',
               position: 'top',
               textColor: 'white',

@@ -30,7 +30,15 @@
 </template>
 
 <script>
+import { createMetaMixin } from 'quasar'
 export default {
+  mixins: [
+    createMetaMixin(function () {
+      return {
+        title: '我的'
+      }
+    })
+  ],
   data () {
     return {
       user: undefined

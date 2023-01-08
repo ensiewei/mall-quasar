@@ -29,7 +29,15 @@
 </template>
 
 <script>
+import { createMetaMixin } from 'quasar'
 export default {
+  mixins: [
+    createMetaMixin(function () {
+      return {
+        title: '首页'
+      }
+    })
+  ],
   methods: {
     search () {
       this.$router.push('/search')

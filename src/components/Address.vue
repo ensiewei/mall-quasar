@@ -48,7 +48,15 @@
 </template>
 
 <script>
+import { createMetaMixin } from 'quasar'
 export default {
+  mixins: [
+    createMetaMixin(function () {
+      return {
+        title: '我的地址'
+      }
+    })
+  ],
   data () {
     return {
       address: undefined
@@ -72,6 +80,7 @@ export default {
           this.$router.go(-1)
         } else {
           this.$q.notify({
+            timeout: 1000,
             color: 'red-5',
             textColor: 'white',
             icon: 'warning',
@@ -99,6 +108,7 @@ export default {
         this.address = res.data.address
       } else {
         this.$q.notify({
+          timeout: 1000,
           color: 'red-5',
           textColor: 'white',
           icon: 'warning',

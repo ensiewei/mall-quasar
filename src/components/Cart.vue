@@ -41,7 +41,7 @@
 
           <q-item tag="label" v-for="(value, index) of sku" :key="index">
             <q-item-section side top>
-              <q-checkbox v-model="id[value.id]" @click="computeCountAndPrice" />
+              <q-checkbox v-model="id[value.id]" @click="selectSku" />
             </q-item-section>
 
             <q-item-section avatar>
@@ -93,7 +93,15 @@
 </template>
 
 <script>
+import { createMetaMixin } from 'quasar'
 export default {
+  mixins: [
+    createMetaMixin(function () {
+      return {
+        title: '购物车'
+      }
+    })
+  ],
   data () {
     return {
       login: false,
@@ -137,6 +145,15 @@ export default {
       this.computeCount()
       this.computePrice()
     },
+    selectSku () {
+      console.log(this.id)
+      let flag = true
+      for (const id in this.id) {
+        if (this.id[id] === false) flag = false
+      }
+      this.all = flag
+      this.computeCountAndPrice()
+    },
     openSku (id) {
       const routeData = this.$router.resolve({
         path: String(id)
@@ -146,6 +163,7 @@ export default {
     changeCount (sku, count) {
       if (count < 1) {
         this.$q.notify({
+          timeout: 1000,
           color: 'red-5',
           textColor: 'white',
           icon: 'warning',
@@ -153,6 +171,7 @@ export default {
         })
       } else if (sku.stockCount < count) {
         this.$q.notify({
+          timeout: 1000,
           color: 'red-5',
           textColor: 'white',
           icon: 'warning',
@@ -174,6 +193,7 @@ export default {
             this.computePrice()
           } else {
             this.$q.notify({
+              timeout: 1000,
               color: 'red-5',
               textColor: 'white',
               icon: 'warning',
@@ -211,6 +231,7 @@ export default {
     submit () {
       if (this.count === 0) {
         this.$q.notify({
+          timeout: 1000,
           color: 'red-5',
           position: 'top',
           textColor: 'white',
@@ -246,6 +267,7 @@ export default {
             this.$router.go(0)
           } else {
             this.$q.notify({
+              timeout: 1000,
               color: 'red-5',
               textColor: 'white',
               icon: 'warning',
@@ -298,6 +320,7 @@ export default {
           this.$router.go(0)
         } else {
           this.$q.notify({
+            timeout: 1000,
             color: 'red-5',
             textColor: 'white',
             icon: 'warning',
@@ -338,6 +361,7 @@ export default {
         }
       } else {
         this.$q.notify({
+          timeout: 1000,
           color: 'red-5',
           textColor: 'white',
           icon: 'warning',

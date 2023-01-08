@@ -13,7 +13,7 @@
             </template>
           </q-input>
         </q-form>
-        <q-btn dense flat round icon="menu" @click="rightDrawerOpen = !rightDrawerOpen" />
+        <q-btn dense flat round icon="menu" @click="rightDrawerOpen = !rightDrawerOpen" v-if="this.sku" />
       </q-toolbar>
 
     </q-header>
@@ -47,7 +47,15 @@
 </template>
 
 <script>
+import { createMetaMixin } from 'quasar'
 export default {
+  mixins: [
+    createMetaMixin(function () {
+      return {
+        title: '搜索'
+      }
+    })
+  ],
   data () {
     return {
       text: '',
@@ -80,6 +88,7 @@ export default {
     },
     onSearch () {
       this.$q.notify({
+        timeout: 1000,
         color: 'green-4',
         textColor: 'white',
         icon: 'cloud_done',

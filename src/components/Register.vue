@@ -56,7 +56,15 @@
 </template>
 
 <script>
+import { createMetaMixin } from 'quasar'
 export default {
+  mixins: [
+    createMetaMixin(function () {
+      return {
+        title: '注册'
+      }
+    })
+  ],
   data () {
     return {
       repassword: undefined,
@@ -66,6 +74,7 @@ export default {
   methods: {
     onSubmit () {
       this.$q.notify({
+        timeout: 1000,
         color: 'green-4',
         textColor: 'white',
         icon: 'cloud_done',
@@ -78,6 +87,7 @@ export default {
       }).then(res => {
         if (res.data.code === 0) {
           this.$q.notify({
+            timeout: 1000,
             color: 'green-4',
             textColor: 'white',
             icon: 'cloud_done',
@@ -86,6 +96,7 @@ export default {
           this.$router.go(-1)
         } else {
           this.$q.notify({
+            timeout: 1000,
             color: 'red-5',
             textColor: 'white',
             icon: 'warning',

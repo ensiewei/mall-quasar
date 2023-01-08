@@ -38,7 +38,15 @@
 </template>
 
 <script>
+import { createMetaMixin } from 'quasar'
 export default {
+  mixins: [
+    createMetaMixin(function () {
+      return {
+        title: '登录'
+      }
+    })
+  ],
   data () {
     return {
       user: {}
@@ -47,6 +55,7 @@ export default {
   methods: {
     onSubmit () {
       this.$q.notify({
+        timeout: 1000,
         color: 'green-4',
         position: 'center',
         textColor: 'white',
@@ -61,6 +70,7 @@ export default {
         if (res.data.code === 0) {
           this.$q.cookies.set('token', res.data.token, { expires: '1d' })
           this.$q.notify({
+            timeout: 1000,
             color: 'green-4',
             position: 'center',
             textColor: 'white',
@@ -70,6 +80,7 @@ export default {
           this.$router.go(-1)
         } else {
           this.$q.notify({
+            timeout: 1000,
             color: 'red-5',
             position: 'center',
             textColor: 'white',

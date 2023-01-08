@@ -75,7 +75,15 @@
 </template>
 
 <script>
+import { createMetaMixin } from 'quasar'
 export default {
+  mixins: [
+    createMetaMixin(function () {
+      return {
+        title: '提交订单'
+      }
+    })
+  ],
   data () {
     return {
       address: undefined,
@@ -99,6 +107,7 @@ export default {
         if (res.data.code === 0) {
           if (res.data.address === null) {
             this.$q.notify({
+              timeout: 1000,
               color: 'red-5',
               textColor: 'white',
               icon: 'warning',
@@ -109,6 +118,7 @@ export default {
           this.address = res.data.address
         } else {
           this.$q.notify({
+            timeout: 1000,
             color: 'red-5',
             textColor: 'white',
             icon: 'warning',
@@ -133,6 +143,7 @@ export default {
             this.computePrice()
           } else {
             this.$q.notify({
+              timeout: 1000,
               color: 'red-5',
               textColor: 'white',
               icon: 'warning',
@@ -160,6 +171,7 @@ export default {
             this.computePrice()
           } else {
             this.$q.notify({
+              timeout: 1000,
               color: 'red-5',
               textColor: 'white',
               icon: 'warning',
@@ -182,6 +194,7 @@ export default {
     changeCount (sku, count) {
       if (count < 1) {
         this.$q.notify({
+          timeout: 1000,
           color: 'red-5',
           textColor: 'white',
           icon: 'warning',
@@ -189,6 +202,7 @@ export default {
         })
       } else if (sku.stock < count) {
         this.$q.notify({
+          timeout: 1000,
           color: 'red-5',
           textColor: 'white',
           icon: 'warning',
@@ -211,6 +225,7 @@ export default {
               this.computePrice()
             } else {
               this.$q.notify({
+                timeout: 1000,
                 color: 'red-5',
                 textColor: 'white',
                 icon: 'warning',
@@ -257,6 +272,7 @@ export default {
             }).then(res => {
               if (res.data.code !== 0) {
                 this.$q.notify({
+                  timeout: 1000,
                   color: 'red-5',
                   textColor: 'white',
                   icon: 'warning',
@@ -276,6 +292,7 @@ export default {
           })
         } else {
           this.$q.notify({
+            timeout: 1000,
             color: 'red-5',
             textColor: 'white',
             icon: 'warning',
@@ -291,6 +308,7 @@ export default {
     const token = this.$q.cookies.get('token')
     if (token === null) {
       this.$q.notify({
+        timeout: 1000,
         color: 'red-5',
         textColor: 'white',
         icon: 'warning',

@@ -75,7 +75,15 @@
 </template>
 
 <script>
+import { createMetaMixin } from 'quasar'
 export default {
+  mixins: [
+    createMetaMixin(function () {
+      return {
+        title: '添加地址'
+      }
+    })
+  ],
   data () {
     return {
       rightDrawerOpen: false,
@@ -96,6 +104,7 @@ export default {
       const token = this.$q.cookies.get('token')
       if (token === null) {
         this.$q.notify({
+          timeout: 1000,
           color: 'red-5',
           textColor: 'white',
           icon: 'warning',
@@ -105,6 +114,7 @@ export default {
         return
       }
       this.$q.notify({
+        timeout: 1000,
         color: 'green-4',
         textColor: 'white',
         icon: 'cloud_done',
@@ -121,6 +131,7 @@ export default {
       }).then(res => {
         if (res.data.code === 0) {
           this.$q.notify({
+            timeout: 1000,
             color: 'green-4',
             textColor: 'white',
             icon: 'cloud_done',
@@ -129,6 +140,7 @@ export default {
           this.$router.go(-1)
         } else {
           this.$q.notify({
+            timeout: 1000,
             color: 'red-5',
             textColor: 'white',
             icon: 'warning',
@@ -153,6 +165,7 @@ export default {
           this.area = res.data.area
         } else {
           this.$q.notify({
+            timeout: 1000,
             color: 'red-5',
             textColor: 'white',
             icon: 'warning',
@@ -177,6 +190,7 @@ export default {
             this.level += 1
           } else {
             this.$q.notify({
+              timeout: 1000,
               color: 'red-5',
               textColor: 'white',
               icon: 'warning',
@@ -199,6 +213,7 @@ export default {
     const token = this.$q.cookies.get('token')
     if (token === null) {
       this.$q.notify({
+        timeout: 1000,
         color: 'red-5',
         textColor: 'white',
         icon: 'warning',

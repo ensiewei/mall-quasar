@@ -39,7 +39,15 @@
 </template>
 
 <script>
+import { createMetaMixin } from 'quasar'
 export default {
+  mixins: [
+    createMetaMixin(function () {
+      return {
+        title: '我的订单'
+      }
+    })
+  ],
   data () {
     return {
       tab: 'all',
@@ -88,6 +96,7 @@ export default {
     const token = this.$q.cookies.get('token')
     if (token === null) {
       this.$q.notify({
+        timeout: 1000,
         color: 'red-5',
         textColor: 'white',
         icon: 'warning',
