@@ -12,6 +12,7 @@
       <div class="q-pa-md">
         <q-btn-group spread>
           <q-btn color="primary" label="我的订单" to="order" />
+          <q-btn color="primary" label="收货地址" to="address" />
         </q-btn-group>
       </div>
     </q-page-container>
@@ -59,7 +60,7 @@ export default {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: `http://49.234.30.114:88/api/user/user/authenticate?token=${token}`
+        url: `http://${window.location.hostname}:88/api/user/user/authenticate?token=${token}`
       }).then(res => {
         if (res.data.code === 0) {
           this.user = res.data.user

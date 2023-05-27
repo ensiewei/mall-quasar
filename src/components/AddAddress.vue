@@ -20,13 +20,12 @@
     </q-drawer>
 
     <q-page-container>
-      <div class="q-pa-md" style="max-width: 400px">
+      <div class="q-pa-md">
         <q-form
           @submit="onSubmit"
-          class="q-gutter-md"
         >
           <q-input
-            filled
+            outlined
             v-model="address.name"
             label="收货人"
             lazy-rules
@@ -34,18 +33,18 @@
           />
 
           <q-input
-            filled
+            outlined
             type="number"
             v-model="address.phone"
             label="手机号码"
             lazy-rules
             :rules="[
-              val => val > 10000000000 && val < 20000000000 || '非法的手机号'
+              val => val > 10000000000 && val < 20000000000 || '手机号输入不正确'
             ]"
           />
 
           <q-input
-            filled
+            outlined
             v-model="areaText"
             label="所在地区"
             readonly
@@ -55,21 +54,27 @@
           />
 
           <q-input
-            filled
+            outlined
             type="textarea"
             v-model="address.detailAddress"
             label="详细地址"
             lazy-rules
-            :rules="[ val => val && val.length >= 6 && val.length <= 16 || '请输入你的详细地址(长度应为6到16位)']"
+            :rules="[ val => val && val.length >= 4 && val.length <= 32 || '请输入你的详细地址(长度应为4到32位)']"
           />
 
-          <div>
-            <q-btn color="red" label="保存并使用" type="submit" />
-          </div>
+          <q-btn-group spread>
+            <q-btn color="primary" label="保存并使用" type="submit" />
+          </q-btn-group>
         </q-form>
       </div>
     </q-page-container>
 
+    <q-footer>
+      <div v-if="this.$q.cookies.get('token') === null" class="bg-grey-5">
+        <span>&emsp;你还没登录呢&emsp;</span>
+        <q-btn to="login" color="green">去登陆 >></q-btn>
+      </div>
+    </q-footer>
   </q-layout>
 
 </template>
@@ -105,15 +110,18 @@ export default {
       if (token === null) {
         this.$q.notify({
           timeout: 1000,
-          color: 'red-5',
+          color: 'primary',
           textColor: 'white',
           icon: 'warning',
-          message: '请先登录'
+          message: '你还没登录呢',
+          actions: [
+            { label: '点我去登录 >>', color: 'yellow', handler: () => this.$router.push('login') }
+          ]
         })
-        this.$router.push('login')
         return
       }
       this.$q.notify({
+        position: 'top',
         timeout: 1000,
         color: 'green-4',
         textColor: 'white',
@@ -123,7 +131,7 @@ export default {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://49.234.30.114:88/api/order/address/add',
+        url: `http://${window.location.hostname}:88/api/order/address/add`,
         data: this.address,
         params: {
           userToken: token
@@ -131,6 +139,7 @@ export default {
       }).then(res => {
         if (res.data.code === 0) {
           this.$q.notify({
+            position: 'top',
             timeout: 1000,
             color: 'green-4',
             textColor: 'white',
@@ -140,6 +149,7 @@ export default {
           this.$router.go(-1)
         } else {
           this.$q.notify({
+            position: 'top',
             timeout: 1000,
             color: 'red-5',
             textColor: 'white',
@@ -148,7 +158,14 @@ export default {
           })
         }
       }).catch(e => {
-        console.log(e)
+        this.$q.notify({
+          position: 'center',
+          timeout: 1000,
+          color: 'red',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: '服务器好像走丢了，待会儿再试试吧~'
+        })
       })
     },
 
@@ -159,12 +176,13 @@ export default {
       this.$axios({
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://49.234.30.114:88/api/order/area/list1'
+        url: `http://${window.location.hostname}:88/api/order/area/list1`
       }).then(res => {
         if (res.data.code === 0) {
           this.area = res.data.area
         } else {
           this.$q.notify({
+            position: 'top',
             timeout: 1000,
             color: 'red-5',
             textColor: 'white',
@@ -179,7 +197,7 @@ export default {
         this.$axios({
           method: 'get',
           headers: { 'Content-Type': 'application/json' },
-          url: 'http://49.234.30.114:88/api/order/area/list2',
+          url: `http://${window.location.hostname}:88/api/order/area/list2`,
           params: {
             id: area.id
           }
@@ -190,6 +208,7 @@ export default {
             this.level += 1
           } else {
             this.$q.notify({
+              position: 'top',
               timeout: 1000,
               color: 'red-5',
               textColor: 'white',
@@ -207,19 +226,6 @@ export default {
         this.level = 1
         this.initArea()
       }
-    }
-  },
-  beforeCreate () {
-    const token = this.$q.cookies.get('token')
-    if (token === null) {
-      this.$q.notify({
-        timeout: 1000,
-        color: 'red-5',
-        textColor: 'white',
-        icon: 'warning',
-        message: '请先登录'
-      })
-      this.$router.push('login')
     }
   },
   created () {

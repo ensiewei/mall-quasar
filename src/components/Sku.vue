@@ -12,11 +12,11 @@
         <div class="text-subtitle2" >{{ name }}</div>
         <q-tabs
           v-model="tab[name]"
-          inline-label
+          vertical
           class="text-white shadow-2"
           @click="redirect"
         >
-          <q-tab :name="v" :label="v" v-for="(v, index) of value" :key="index" :class="fetchCountByGroup(name, v) > 0 ? 'bg-purple' : 'bg-grey'" :disable="!fetchCountByGroup(name, v) > 0" />
+          <q-tab :name="v" :label="v" v-for="(v, index) of value" :key="index" :class="fetchCountByGroup(name, v) > 0 ? 'bg-primary' : 'bg-grey'" :disable="!fetchCountByGroup(name, v) > 0" />
         </q-tabs>
       </div>
       <div class="q-pa-md">
@@ -30,7 +30,7 @@
           ]"
         />
         <q-btn-group spread>
-          <q-btn color="red" :label="fetchCount() > 0 ? '确定' : '暂时缺货'" :disable="!(fetchCount() > 0)" @click="submit" />
+          <q-btn color="primary" :label="fetchCount() > 0 ? '确定' : '暂时缺货'" :disable="!(fetchCount() > 0)" @click="submit" />
         </q-btn-group>
       </div>
     </q-drawer>
@@ -58,7 +58,7 @@
           row-key="name"
         />
       </div>
-      <div class="q-pa-md q-gutter-sm">
+      <div class="q-pa-md">
         <q-img
           :src="img"
           v-for="(img, index) of sku.spuImage"
@@ -71,8 +71,8 @@
       <div class="q-pa-md">
         <q-btn-group spread>
           <q-btn color="primary" label="购物车" to="/cart" />
-          <q-btn color="purple" label="加入购物车" @click="(rightDrawerOpen = true) && (submitType = 0)" />
-          <q-btn color="red" label="立即购买" @click="(rightDrawerOpen = true) && (submitType = 1)" />
+          <q-btn color="primary" label="加入购物车" @click="(rightDrawerOpen = true) && (submitType = 0)" />
+          <q-btn color="primary" label="立即购买" @click="(rightDrawerOpen = true) && (submitType = 1)" />
         </q-btn-group>
       </div>
     </q-footer>
@@ -126,7 +126,7 @@ export default {
       this.$axios({
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
-        url: `http://49.234.30.114:88/api/commodity/sku/detail/${this.$route.params.id}`
+        url: `http://${window.location.hostname}:88/api/commodity/sku/detail/${this.$route.params.id}`
       }).then(res => {
         this.sku = res.data.sku
         this.rows = this.sku.groupDetail
@@ -150,7 +150,14 @@ export default {
           }
         }
       }).catch(e => {
-        console.log(e)
+        this.$q.notify({
+          position: 'center',
+          timeout: 1000,
+          color: 'red',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: '服务器好像走丢了，待会儿再试试吧~'
+        })
       })
     },
     redirect () {
@@ -195,12 +202,11 @@ export default {
         this.$q.notify({
           timeout: 1000,
           color: 'primary',
-          position: 'top',
           textColor: 'white',
           icon: 'warning',
           message: '你还没登录呢',
           actions: [
-            { label: '点我去登录', color: 'green', handler: () => this.$router.push('login') }
+            { label: '点我去登录 >>', color: 'yellow', handler: () => this.$router.push('login') }
           ]
         })
         return
@@ -209,7 +215,7 @@ export default {
         this.$axios({
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
-          url: 'http://49.234.30.114:88/api/cart/cart/add',
+          url: `http://${window.location.hostname}:88/api/cart/cart/add`,
           params: {
             userToken: this.$q.cookies.get('token'),
             skuId: this.$route.params.id,
@@ -235,7 +241,14 @@ export default {
               message: res.data.msg
             })
           }
-        }).catch(e => console.log(e))
+        }).catch(e => this.$q.notify({
+          position: 'center',
+          timeout: 1000,
+          color: 'red',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: '服务器好像走丢了，待会儿再试试吧~'
+        }))
       } else if (this.submitType === 1) {
         this.$router.push({
           name: 'Submit',

@@ -4,12 +4,13 @@
     <q-header elevated class="bg-primary text-white">
       <q-tabs
         v-model="tab"
+        @click="onOrder()"
       >
-        <q-tab name="all" label="全部" @click="initOrder(null)" />
-        <q-tab name="pending" label="待付款" @click="initOrder(0)" />
-        <q-tab name="received" label="待收货" @click="initOrder(2)" />
-        <q-tab name="completed" label="已完成" @click="initOrder(3)" />
-        <q-tab name="cancled" label="已取消" @click="initOrder(1)" />
+        <q-tab name="all" label="全部" />
+        <q-tab name="pending" label="待付款" />
+        <q-tab name="received" label="待收货" />
+        <q-tab name="completed" label="已完成" />
+        <q-tab name="canceled" label="已取消" />
       </q-tabs>
     </q-header>
 
@@ -33,8 +34,15 @@
           </q-item>
         </q-list>
       </div>
+      <q-icon name="o_arrow_back" size="xl" style="margin-bottom:100px" color="primary" class="fixed-bottom-right q-ma-md bg-grey-4 rounded-borders" @click="$router.back"/>
     </q-page-container>
 
+    <q-footer>
+      <div v-if="this.$q.cookies.get('token') === null" class="bg-grey-5">
+        <span>&emsp;你还没登录呢&emsp;</span>
+        <q-btn to="login" color="green">去登陆 >></q-btn>
+      </div>
+    </q-footer>
   </q-layout>
 </template>
 
@@ -50,6 +58,7 @@ export default {
   ],
   data () {
     return {
+      login: false,
       tab: 'all',
       order: undefined
     }
@@ -63,14 +72,34 @@ export default {
         }
       })
     },
-    initOrder (status) {
+    onOrder () {
+      switch (this.tab) {
+        case 'pending':
+          this.$router.replace('order?status=0').then(() => this.initOrder())
+          break
+        case 'canceled':
+          this.$router.replace('order?status=1').then(() => this.initOrder())
+          break
+        case 'received':
+          this.$router.replace('order?status=2').then(() => this.initOrder())
+          break
+        case 'completed':
+          this.$router.replace('order?status=3').then(() => this.initOrder())
+          break
+        default:
+          this.$router.replace('order').then(() => this.initOrder())
+          break
+      }
+    },
+    initOrder () {
+      if (this.$q.cookies.get('token') === null) return
       this.$axios({
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://49.234.30.114:88/api/order/order/all',
+        url: `http://${window.location.hostname}:88/api/order/order/all`,
         params: {
           userToken: this.$q.cookies.get('token'),
-          status
+          status: this.$route.query.status
         }
       }).then(res => {
         if (res.data.code === 0) {
@@ -92,21 +121,25 @@ export default {
       }
     }
   },
-  beforeCreate () {
-    const token = this.$q.cookies.get('token')
-    if (token === null) {
-      this.$q.notify({
-        timeout: 1000,
-        color: 'red-5',
-        textColor: 'white',
-        icon: 'warning',
-        message: '请先登录'
-      })
-      this.$router.push('login')
-    }
-  },
   mounted () {
-    this.initOrder(null)
+    switch (this.$route.query.status - 0) {
+      case 0:
+        this.tab = 'pending'
+        break
+      case 1:
+        this.tab = 'canceled'
+        break
+      case 2:
+        this.tab = 'received'
+        break
+      case 3:
+        this.tab = 'completed'
+        break
+      default:
+        this.tab = 'all'
+        break
+    }
+    this.initOrder()
   }
 }
 </script>

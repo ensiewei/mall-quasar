@@ -24,20 +24,19 @@
           inline-label
           class="text-white shadow-2"
         >
-          <q-tab :name="v" :label="v" v-for="(v, index) of value" :key="index" @click="computeId" :class="fetchDrawerSkuStockCountByGroup(name, v) > 0 ? 'bg-purple' : 'bg-grey'" :disable="!fetchDrawerSkuStockCountByGroup(name, v) > 0" />
+          <q-tab :name="v" :label="v" v-for="(v, index) of value" :key="index" @click="computeId" :class="fetchDrawerSkuStockCountByGroup(name, v) > 0 ? 'bg-primary' : 'bg-grey'" :disable="!fetchDrawerSkuStockCountByGroup(name, v) > 0" />
         </q-tabs>
       </div>
       <div class="q-pa-md">
         <q-btn-group spread>
-          <q-btn color="red" :label="fetchDrawerSkuStockCount() > 0 ? '确定' : '暂时缺货'" :disable="!(fetchDrawerSkuStockCount() > 0)" @click="updateItem" />
+          <q-btn color="primary" :label="fetchDrawerSkuStockCount() > 0 ? '确定' : '暂时缺货'" :disable="!(fetchDrawerSkuStockCount() > 0)" @click="updateItem" />
         </q-btn-group>
       </div>
     </q-drawer>
 
     <q-page-container>
       <div v-if="login" class="q-pa-md">
-        <q-list bordered padding>
-          <q-item-label header>购物车</q-item-label>
+        <q-list bordered padding separator v-if="sku.length > 0">
 
           <q-item tag="label" v-for="(value, index) of sku" :key="index">
             <q-item-section side top>
@@ -63,13 +62,14 @@
             </q-item-section>
           </q-item>
         </q-list>
+        <span v-else>购物车里空空如也...</span>
       </div>
     </q-page-container>
 
     <q-footer class="bg-white q-pa-md">
       <div v-if="!login" class="bg-grey-5">
         <span>&emsp;你还没登录呢&emsp;</span>
-        <q-btn to="login" color="red">去登陆 ></q-btn>
+        <q-btn to="login" color="green">去登陆 >></q-btn>
       </div>
       <q-toolbar v-else class="bg-grey-5">
         <q-checkbox v-model="all" @click="selectAll" />
@@ -78,7 +78,7 @@
         <span>合计:￥</span>
         <span>{{ price }}</span>
         <span>&emsp;</span>
-        <q-btn color="red" @click="submit">{{ isSubmit ? '去结算' : '删除'}}({{ count }})</q-btn>
+        <q-btn color="green" @click="submit">{{ isSubmit ? '去结算' : '删除'}}({{ count }})</q-btn>
       </q-toolbar>
       <div >
         <q-btn-group spread>
@@ -146,7 +146,6 @@ export default {
       this.computePrice()
     },
     selectSku () {
-      console.log(this.id)
       let flag = true
       for (const id in this.id) {
         if (this.id[id] === false) flag = false
@@ -163,6 +162,7 @@ export default {
     changeCount (sku, count) {
       if (count < 1) {
         this.$q.notify({
+          position: 'top',
           timeout: 1000,
           color: 'red-5',
           textColor: 'white',
@@ -171,6 +171,7 @@ export default {
         })
       } else if (sku.stockCount < count) {
         this.$q.notify({
+          position: 'top',
           timeout: 1000,
           color: 'red-5',
           textColor: 'white',
@@ -181,7 +182,7 @@ export default {
         this.$axios({
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
-          url: 'http://49.234.30.114:88/api/cart/cart/modifyCount',
+          url: `http://${window.location.hostname}:88/api/cart/cart/modifyCount`,
           params: {
             userToken: this.$q.cookies.get('token'),
             cartId: sku.cartId,
@@ -193,6 +194,7 @@ export default {
             this.computePrice()
           } else {
             this.$q.notify({
+              position: 'top',
               timeout: 1000,
               color: 'red-5',
               textColor: 'white',
@@ -201,7 +203,14 @@ export default {
             })
           }
         }).catch(e => {
-          console.log(e)
+          this.$q.notify({
+            position: 'center',
+            timeout: 1000,
+            color: 'red',
+            textColor: 'white',
+            icon: 'cloud_done',
+            message: '服务器好像走丢了，待会儿再试试吧~'
+          })
         })
       }
     },
@@ -257,7 +266,7 @@ export default {
         this.$axios({
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
-          url: 'http://49.234.30.114:88/api/cart/cart/delete',
+          url: `http://${window.location.hostname}:88/api/cart/cart/delete`,
           params: {
             userToken: this.$q.cookies.get('token')
           },
@@ -267,6 +276,7 @@ export default {
             this.$router.go(0)
           } else {
             this.$q.notify({
+              position: 'top',
               timeout: 1000,
               color: 'red-5',
               textColor: 'white',
@@ -275,11 +285,26 @@ export default {
             })
           }
         }).catch(e => {
-          console.log(e)
+          this.$q.notify({
+            position: 'center',
+            timeout: 1000,
+            color: 'red',
+            textColor: 'white',
+            icon: 'cloud_done',
+            message: '服务器好像走丢了，待会儿再试试吧~'
+          })
         })
       }
     },
     fetchDrawerSkuStockCount () {
+      let flag = true
+      for (const index in this.drawerSkus) {
+        flag = true
+        for (const name in this.tab) {
+          if (this.drawerSkus[index][name] !== this.tab[name]) flag = false
+        }
+        if (flag) return this.drawerSkus[index].count
+      }
       return this.drawerSku.stockCount || 0
     },
     fetchDrawerSkuStockCountByGroup (name, value) {
@@ -309,7 +334,7 @@ export default {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://49.234.30.114:88/api/cart/cart/modifyItem',
+        url: `http://${window.location.hostname}:88/api/cart/cart/modifyItem`,
         params: {
           userToken: this.$q.cookies.get('token'),
           cartId: this.drawerSku.cartId,
@@ -320,6 +345,7 @@ export default {
           this.$router.go(0)
         } else {
           this.$q.notify({
+            position: 'top',
             timeout: 1000,
             color: 'red-5',
             textColor: 'white',
@@ -328,7 +354,14 @@ export default {
           })
         }
       }).catch(e => {
-        console.log(e)
+        this.$q.notify({
+          position: 'center',
+          timeout: 1000,
+          color: 'red',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: '服务器好像走丢了，待会儿再试试吧~'
+        })
       })
     }
   },
@@ -341,7 +374,7 @@ export default {
     this.$axios({
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
-      url: 'http://49.234.30.114:88/api/cart/cart/list',
+      url: `http://${window.location.hostname}:88/api/cart/cart/list`,
       params: {
         userToken: this.$q.cookies.get('token')
       }
@@ -361,6 +394,7 @@ export default {
         }
       } else {
         this.$q.notify({
+          position: 'top',
           timeout: 1000,
           color: 'red-5',
           textColor: 'white',
@@ -369,7 +403,14 @@ export default {
         })
       }
     }).catch(e => {
-      console.log(e)
+      this.$q.notify({
+        position: 'center',
+        timeout: 1000,
+        color: 'red',
+        textColor: 'white',
+        icon: 'cloud_done',
+        message: '服务器好像走丢了，待会儿再试试吧~'
+      })
     })
   }
 }

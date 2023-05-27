@@ -63,10 +63,17 @@
       </div>
     </q-page-container>
 
+    <q-footer>
+      <div v-if="this.$q.cookies.get('token') === null" class="bg-grey-5">
+        <span>&emsp;你还没登录呢&emsp;</span>
+        <q-btn to="login" color="green">去登陆 >></q-btn>
+      </div>
+    </q-footer>
+
     <q-footer elevated class="bg-white" v-if="order.status === 0">
       <q-toolbar>
         <q-btn push color="primary" label="取消" @click="cancel" />
-        <q-btn push color="red" label="支付" @click="pay" />
+        <q-btn push color="green" class="q-ml-sm" label="支付" @click="pay" />
       </q-toolbar>
     </q-footer>
 
@@ -75,7 +82,6 @@
         <q-btn push color="primary" label="确认收货" @click="confirm" />
       </q-toolbar>
     </q-footer>
-
   </q-layout>
 </template>
 
@@ -102,10 +108,12 @@ export default {
       this.$router.go(-1)
     },
     initOrder () {
+      if (this.$q.cookies.get('token') === null) return
+
       this.$axios({
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://49.234.30.114:88/api/order/order/detail',
+        url: `http://${window.location.hostname}:88/api/order/order/detail`,
         params: {
           userToken: this.$q.cookies.get('token'),
           serialNumber: this.$route.query.serialNumber
@@ -125,10 +133,12 @@ export default {
       this.sku = this.order.sku
     },
     initAddress () {
+      if (this.$q.cookies.get('token') === null) return
+
       this.$axios({
         method: 'get',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://49.234.30.114:88/api/order/address/fetch',
+        url: `http://${window.location.hostname}:88/api/order/address/fetch`,
         params: {
           userToken: this.$q.cookies.get('token'),
           id: this.order.addressId
@@ -138,6 +148,7 @@ export default {
           this.address = res.data.address
         } else {
           this.$q.notify({
+            position: 'top',
             timeout: 1000,
             color: 'red-5',
             textColor: 'white',
@@ -146,14 +157,21 @@ export default {
           })
         }
       }).catch(e => {
-        console.log(e)
+        this.$q.notify({
+          position: 'center',
+          timeout: 1000,
+          color: 'red',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: '服务器好像走丢了，待会儿再试试吧~'
+        })
       })
     },
     cancel () {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://49.234.30.114:88/api/order/order/cancel',
+        url: `http://${window.location.hostname}:88/api/order/order/cancel`,
         params: {
           userToken: this.$q.cookies.get('token'),
           serialNumber: this.$route.query.serialNumber
@@ -168,7 +186,7 @@ export default {
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://49.234.30.114:88/api/order/order/pay',
+        url: `http://${window.location.hostname}:88/api/order/order/pay`,
         params: {
           userToken: this.$q.cookies.get('token'),
           serialNumber: this.$route.query.serialNumber
@@ -180,10 +198,12 @@ export default {
       })
     },
     confirm () {
+      if (this.$q.cookies.get('token') === null) return
+
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://49.234.30.114:88/api/order/order/confirm',
+        url: `http://${window.location.hostname}:88/api/order/order/confirm`,
         params: {
           userToken: this.$q.cookies.get('token'),
           serialNumber: this.$route.query.serialNumber
@@ -229,18 +249,6 @@ export default {
   beforeCreate () {
     if (!this.$route.query.serialNumber) {
       this.$router.go(-1)
-      return
-    }
-    const token = this.$q.cookies.get('token')
-    if (token === null) {
-      this.$q.notify({
-        timeout: 1000,
-        color: 'red-5',
-        textColor: 'white',
-        icon: 'warning',
-        message: '请先登录'
-      })
-      this.$router.push('login')
     }
   },
   mounted () {

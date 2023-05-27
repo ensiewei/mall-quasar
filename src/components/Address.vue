@@ -5,30 +5,31 @@
       <q-toolbar>
         <q-btn flat round dense icon="arrow_back" @click="back" />
         <q-toolbar-title>
-          收货地址
+          选择你的收货地址
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
     <q-page-container>
-      <q-list bordered class="rounded-borders" style="max-width: 600px">
-        <q-item v-for="(value, index) of address" :key="index">
+      <q-list bordered separator>
+        <q-item v-for="(value, index) of address" :key="index" >
           <q-item-section top @click="setDefault(value.id)">
-            <q-item-label caption lines="1">
-              {{ value.areaString}}
+            <q-item-label lines="1">
+              {{ value.areaString }}
+              <span v-if="value.isDefault === 1" class="text-primary">(默认地址)</span>
             </q-item-label>
             <q-item-label lines="1">
-              <span class="text-weight-bold">{{ value.detailAddress }}</span>
+              <span>{{ value.detailAddress }}</span>
             </q-item-label>
             <q-item-label lines="1">
-              <span class="text-grey-8">{{ value.name }}</span>
+              <span>{{ value.name }}</span>
               <span>&emsp;</span>
-              <span class="text-grey-8">{{ value.phone }}</span>
+              <span>{{ value.phone }}</span>
             </q-item-label>
           </q-item-section>
 
           <q-item-section top side>
-            <div class="text-grey-8 q-gutter-xs">
+            <div>
               <q-btn size="12px" flat dense round icon="border_color" :to="'modifyAddress?id=' + value.id " />
             </div>
           </q-item-section>
@@ -37,9 +38,13 @@
     </q-page-container>
 
     <q-footer class="bg-white">
-      <div class="q-pa-md">
+      <div v-if="this.$q.cookies.get('token') === null" class="bg-grey-5">
+        <span>&emsp;你还没登录呢&emsp;</span>
+        <q-btn to="login" color="green">去登陆 >></q-btn>
+      </div>
+      <div class="q-pa-md" v-else>
         <q-btn-group spread>
-          <q-btn color="red" label="新建收货地址" icon-right="add" to="addAddress" />
+          <q-btn color="primary" label="新建收货地址" icon-right="add" to="addAddress" />
         </q-btn-group>
       </div>
     </q-footer>
@@ -67,10 +72,12 @@ export default {
       this.$router.go(-1)
     },
     setDefault (id) {
+      if (this.$q.cookies.get('token') === null) return
+
       this.$axios({
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
-        url: 'http://49.234.30.114:88/api/order/address/setDefault',
+        url: `http://${window.location.hostname}:88/api/order/address/setDefault`,
         params: {
           userToken: this.$q.cookies.get('token'),
           id: id
@@ -80,6 +87,7 @@ export default {
           this.$router.go(-1)
         } else {
           this.$q.notify({
+            position: 'top',
             timeout: 1000,
             color: 'red-5',
             textColor: 'white',
@@ -93,13 +101,12 @@ export default {
   beforeCreate () {
     const token = this.$q.cookies.get('token')
     if (token === null) {
-      this.$router.push('login')
       return
     }
     this.$axios({
       method: 'get',
       headers: { 'Content-Type': 'application/json' },
-      url: 'http://49.234.30.114:88/api/order/address/list',
+      url: `http://${window.location.hostname}:88/api/order/address/list`,
       params: {
         userToken: token
       }
@@ -108,6 +115,7 @@ export default {
         this.address = res.data.address
       } else {
         this.$q.notify({
+          position: 'top',
           timeout: 1000,
           color: 'red-5',
           textColor: 'white',
